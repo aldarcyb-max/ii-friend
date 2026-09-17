@@ -1,0 +1,711 @@
+/* ==========================================================
+   Личный сайт врача-стоматолога — стили
+   Палитра и типографика редактируются здесь, в блоке :root
+   ========================================================== */
+
+:root {
+  --color-bg: #ffffff;
+  --color-bg-soft: #f4f6f9;
+  --color-bg-card: #eef1f6;
+  --color-accent: #7188ab;
+  --color-accent-dark: #4c5f7d;
+  --color-band: #7f95b8;
+  --color-text: #22262e;
+  --color-text-muted: #5b6472;
+  --color-border: #dde2ea;
+  --font-heading: 'Comfortaa', 'Nunito', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --container-width: 1200px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin: 0 0 16px;
+  line-height: 1.25;
+}
+
+p { margin: 0 0 14px; }
+
+a { color: inherit; text-decoration: none; }
+
+img { max-width: 100%; display: block; }
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section { padding: 80px 0; }
+
+.section-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  text-align: center;
+}
+
+.section-kicker {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  text-transform: none;
+  margin-bottom: 8px;
+}
+
+.section-text {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 40px;
+  color: var(--color-text-muted);
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 30px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-light {
+  background: rgba(255,255,255,0.92);
+  color: var(--color-accent-dark);
+}
+
+.btn-dark {
+  background: var(--color-accent-dark);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(20,26,38,0.25);
+}
+
+.btn-dark:hover { box-shadow: 0 10px 24px rgba(20,26,38,0.32); }
+
+/* ---------------- Header ---------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  gap: 24px;
+}
+
+.brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  flex: 0 0 auto;
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  justify-content: center;
+  flex: 1 1 auto;
+}
+
+.main-nav a {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.main-nav a:hover { color: var(--color-accent); }
+
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.burger span {
+  display: block;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------------- Hero ---------------- */
+
+/* Hero — фон это готовый брендовый баннер (1920x768) с именем и текстом "внутри"
+   картинки. Раньше пропорции держались через padding-top на самой .hero, но
+   кнопка "Хочу написать доктору" шла обычным потоком ВНУТРИ той же секции и
+   добавляла к ней высоту сверх padding-top — из-за этого итоговый блок переставал
+   быть ровно 1920:768, и background-size:contain подгонял картинку не на всю
+   ширину (оставались пустые поля по бокам). Теперь фон — в отдельном блоке
+   .hero-banner с CSS aspect-ratio: он ВСЕГДА держит те же пропорции, что и
+   картинка, независимо от того, что идёт после него, поэтому cover заполняет
+   его целиком без полей и без обрезки. */
+/* Мягкий фирменный оттенок (тот же, что у "Услуги"/"Образование") — выделяет
+   hero отдельным блоком и не спорит с остальной палитрой сайта. Сама картинка
+   тоже перекрашена в этот же тон (её родной белый фон), чтобы стык с областью
+   кнопки ниже был совершенно незаметен. */
+.hero { position: relative; background: var(--color-bg-soft); }
+
+.hero-banner {
+  aspect-ratio: 1920 / 768;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--color-bg-soft);
+}
+
+.hero-content {
+  text-align: center;
+  padding: 24px 24px 44px;
+}
+
+/* Заголовок и подзаголовок нужны для SEO и скринридеров, но не показываются —
+   текст с именем и специализацией уже "вшит" в саму картинку hero-bg.jpg */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------- About ---------------- */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.about-photo img {
+  border-radius: var(--radius-lg);
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+}
+
+.about-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+}
+
+.about-role {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.about-card hr {
+  border: none;
+  border-top: 2px solid var(--color-accent);
+  width: 48px;
+  margin: 18px 0 22px;
+}
+
+/* ---------------- Services ---------------- */
+
+.services { background: var(--color-bg-soft); }
+
+.services-list {
+  display: grid;
+  gap: 32px;
+  max-width: 800px;
+  margin: 40px auto 0;
+}
+
+.service-item h3 { margin-bottom: 8px; }
+
+.service-item p { color: var(--color-text-muted); margin: 0; }
+
+/* ---------------- Slider (reviews + portfolio) ---------------- */
+
+.slider {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.slider-track {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+/* Показан только активный слайд (остальные скрыты через [hidden] из JS) —
+   высота блока всегда естественная, под конкретный слайд. Анимируем только
+   opacity (это безопасно и не требует пересчёта раскладки) — новый слайд
+   плавно проявляется, а не появляется рывком. */
+.slide {
+  width: 100%;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.slide.is-visible {
+  opacity: 1;
+}
+
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: var(--color-text);
+  box-shadow: 0 4px 12px rgba(20,26,38,0.08);
+}
+
+.slider-arrow:hover { background: var(--color-bg-card); }
+
+.slider-prev { left: -60px; }
+.slider-next { right: -60px; }
+
+/* У отзывов слайды очень разной длины (короткий отзыв vs длинный на 3
+   абзаца). Карусели выставлен data-fixed-height (см. script.js) — высота
+   трека фиксируется по самому длинному слайду, поэтому стрелки (top:50% из
+   базового .slider-arrow) больше не "бегают" при переключении — сам блок
+   больше не меняет размер. */
+
+/* У кейсов "Хирургическое лечение" разброс высоты ещё больше (одно фото
+   с короткой подписью vs фото + описание на 5 абзацев) — фиксированная
+   высота там оставляла много пустого места под короткими кейсами. Поэтому
+   точки для переключения МЕЖДУ кейсами тут не используем — стрелки на
+   фиксированной высоте от верха блока (см. ниже), кейс сохраняет свою
+   естественную высоту, пустот не остаётся. Обе стрелки (вперёд/назад)
+   при этом видны — точки убираем только у САМОЙ внешней карусели, а не
+   у вложенных мини-каруселей фото внутри кейса (`>` — только прямой
+   потомок, иначе селектор ловил бы и точки вложенного .case-slider). */
+#surgery-slider > .slider-dots {
+  display: none;
+}
+
+#surgery-slider .slider-arrow {
+  top: 220px;
+}
+
+/* У "Терапевтическое лечение" кейсы тоже сильно отличаются по высоте
+   (одно фото vs мини-карусель на 6 фото + длинное описание) — та же
+   логика и тот же приём, что и у "Хирургическое лечение" выше: точки
+   внешней карусели убираем, стрелки — на фиксированной высоте. */
+#therapy-slider > .slider-dots {
+  display: none;
+}
+
+#therapy-slider .slider-arrow {
+  top: 220px;
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.slider-dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-border);
+  cursor: pointer;
+  padding: 0;
+}
+
+.slider-dots button.active {
+  background: var(--color-accent);
+  width: 22px;
+  border-radius: 5px;
+  transition: width .2s ease;
+}
+
+/* Reviews */
+
+.review-slide {
+  text-align: center;
+  padding: 8px 40px 0;
+}
+
+.review-text {
+  max-width: 700px;
+  margin: 0 auto 20px;
+  color: var(--color-text-muted);
+}
+
+.review-name { font-weight: 700; margin-bottom: 2px; }
+.review-source { color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 0; }
+
+.reviews-sources {
+  text-align: center;
+  margin: 32px 0 0;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.reviews-sources a {
+  color: var(--color-accent-dark);
+  font-weight: 700;
+}
+
+.reviews-sources a:hover { text-decoration: underline; }
+
+/* Education */
+
+/* Тот же приём, что у .services и .certificates — мягкий фон на всю секцию,
+   чтобы "Образование" визуально отделялось от "Отзывы" сверху и
+   "Сертификаты" снизу, а не сливалось с ними на белом фоне */
+.education { background: var(--color-bg-soft); }
+
+.education-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.education-item img {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  margin-bottom: 16px;
+}
+
+.education-item h3 { margin-bottom: 6px; }
+.education-item p { color: var(--color-text-muted); margin: 0; }
+
+/* Certificates */
+
+.certificates { background: var(--color-bg-soft); }
+
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+/* Без обрезки — среди сертификатов есть и книжная, и альбомная ориентация,
+   аспект-рейшо+cover срезал бы текст на некоторых */
+.certificate-item img {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  width: 100%;
+}
+
+/* Portfolio */
+
+.portfolio-category { padding-top: 56px; }
+
+/* Хирургическое лечение (галерея + кейсы) выделено мягким голубым фоном —
+   отделяет его от "Терапевтического лечения" ниже, чтобы разделы не сливались.
+   На всю ширину экрана (не только внутри .container) — max-width сброшен,
+   поэтому скруглённые углы тут ни к чему, полоса идёт от края до края.
+   Заголовок/текст/карусель внутри остаются по центру благодаря их
+   собственным max-width+margin:auto (.section-text, .slider). */
+.surgery-category {
+  background: #e3ebf6;
+  max-width: none;
+  width: 100%;
+  border-radius: 0;
+  padding: 48px 24px 56px;
+}
+
+.portfolio-title {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.portfolio-slide img {
+  border-radius: var(--radius-lg);
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+}
+
+.portfolio-caption {
+  padding: 22px 8px 0;
+  border-top: 1px solid var(--color-border);
+  margin-top: 22px;
+}
+
+.portfolio-caption h4 { margin-bottom: 6px; }
+.portfolio-caption p { color: var(--color-text-muted); margin: 0; }
+
+/* Кейс — один слайд внутри карусели «Хирургическое лечение» (одна точка
+   в общем счётчике), но со своей вложенной мини-каруселью фото и одним общим
+   описанием под ней, которое не меняется при переключении фото. Вместо
+   стрелки — столбик точек справа от фото: навёл курсор — фото переключилось.
+   Одной стрелкой меньше, не путается с боковыми стрелками внешней карусели. */
+
+.case-title {
+  text-align: center;
+  font-size: 1.15rem;
+  margin-bottom: 20px;
+}
+
+.case-photo-frame {
+  max-width: 560px;
+  margin: 0 auto 24px;
+}
+
+.case-slider {
+  max-width: none;
+}
+
+/* Обёртка вокруг фото — точки позиционируются по её высоте, поэтому стоят
+   ровно на середине именно фото (а не всего блока вместе с точками) */
+.case-photo-viewport {
+  position: relative;
+}
+
+/* Снимки в кейсе — показываем в родных пропорциях, без обрезки и без чёрных
+   полей: никакого фиксированного aspect-ratio/object-fit, размер — по
+   собственным пропорциям картинки (max-width/max-height + auto), а не
+   растягивание на всю ширину блока. Один и тот же вид — и для кейсов с
+   несколькими фото (карусель), и для кейсов с одним фото (просто <img>
+   прямо в .case-photo-frame).
+   max-height нужен, чтобы редкое портретное/квадратное фото (например,
+   внутриротовое фото вертикально или почти квадратный КТ-снимок) не
+   раздувало блок на всю высоту — тогда у мини-карусели кейса (data-fixed-
+   height в script.js, высота фиксируется по САМОМУ высокому фото) под
+   остальными, более широкими фото оставалась бы огромная пустая область.
+   Широкие/альбомные фото (подавляющее большинство) в этот предел не
+   упираются и выглядят как раньше — во всю ширину блока.
+   aspect-ratio/object-fit явно сброшены — иначе CSS каскадом (по свойствам,
+   а не по правилу целиком) сюда всё равно просачивался aspect-ratio:16/10
+   и object-fit:cover из общего .portfolio-slide img, и с width/height:auto
+   браузер считал размер по ЭТОМУ чужому соотношению сторон вместо родного
+   у картинки — часть фото обрезалась. */
+.case-slider .slide img,
+.case-photo-frame > img {
+  display: block;
+  aspect-ratio: auto;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 480px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+}
+
+/* Столбик точек всегда СПРАВА от фото у любого кейса с несколькими фото
+   (не только у первого) — вынесены наружу за край, чтобы сразу читались
+   как отдельный кликабельный элемент, а не часть картинки. Каждая точка —
+   отдельное фото; навёл курсор — оно и показалось. */
+.case-slider .slider-dots {
+  position: absolute;
+  top: 50%;
+  right: -28px;
+  transform: translateY(-50%);
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.case-slider .slider-dots button {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-border);
+}
+
+.case-slider .slider-dots button.active {
+  width: 14px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.case-description {
+  max-width: 560px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+}
+
+.case-description p { color: var(--color-text-muted); margin-bottom: 14px; }
+.case-description p:last-child { margin-bottom: 0; }
+
+/* ---------------- Social band ---------------- */
+
+.social-band {
+  background: var(--color-band);
+  color: #fff;
+  padding: 64px 0;
+  text-align: center;
+}
+
+.social-text {
+  font-size: 1.15rem;
+  max-width: 640px;
+  margin: 0 auto 6px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(20,26,38,0.85);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .15s ease;
+}
+
+.icon-circle:hover { transform: translateY(-3px); }
+
+/* ---------------- Contacts / footer ---------------- */
+
+.contacts {
+  text-align: center;
+  padding-bottom: 60px;
+}
+
+.contacts-name {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 28px;
+}
+
+.contacts-lead { color: var(--color-text-muted); margin-bottom: 6px; }
+
+.clinics-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  color: var(--color-text-muted);
+}
+
+.clinics-list li { margin-bottom: 4px; }
+.clinics-list strong { color: var(--color-text); }
+
+.contacts-note {
+  max-width: 480px;
+  margin: 0 auto 20px;
+  color: var(--color-text-muted);
+}
+
+.copyright {
+  margin-top: 40px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================
+   Адаптив
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .education-grid { grid-template-columns: 1fr; max-width: 480px; }
+  .certificates-grid { grid-template-columns: repeat(3, 1fr); }
+  .slider-prev { left: 0; }
+  .slider-next { right: 0; }
+  .slider-arrow { width: 38px; height: 38px; }
+}
+
+@media (max-width: 720px) {
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 0 20px;
+    border-bottom: 1px solid var(--color-border);
+    display: none;
+  }
+
+  .main-nav.open { display: flex; }
+
+  .main-nav a { padding: 10px 0; width: 100%; text-align: center; }
+
+  .burger { display: flex; }
+
+  .section { padding: 56px 0; }
+
+  .certificates-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .review-slide { padding: 8px 0 0; }
+
+  .slider-prev, .slider-next { display: none; }
+
+  /* На мобильном наведения курсором нет — точки кейса реагируют на тап (уже
+     обрабатывается в JS). Но узкому экрану нужен отступ поменьше, иначе точки
+     вылезают за край экрана */
+  .case-slider .slider-dots { right: -16px; }
+
+  /* На мобильном обе стрелки "Хирургическое лечение" тоже оставляем видимыми —
+     так же, как на десктопе, можно листать кейсы в обе стороны (не только свайпом) */
+  #surgery-slider .slider-prev { display: flex; left: 4px; }
+  #surgery-slider .slider-next { display: flex; right: 4px; }
+  #therapy-slider .slider-prev { display: flex; left: 4px; }
+  #therapy-slider .slider-next { display: flex; right: 4px; }
+}
